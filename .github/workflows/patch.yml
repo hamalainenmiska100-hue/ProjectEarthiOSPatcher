@@ -1,0 +1,31 @@
+name: Patch IPA
+
+on:
+  workflow_dispatch:
+    inputs:
+      ip:
+        description: "Server IP"
+        required: true
+        default: "127.0.0.1"
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run patcher
+        run: python main.py ${{ github.event.inputs.ip }}
+
+      - name: Upload patched IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: patched-ipa
+          path: patched.ipa
